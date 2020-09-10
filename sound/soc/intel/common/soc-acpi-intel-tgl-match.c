@@ -43,6 +43,14 @@ static const struct snd_soc_acpi_adr_device rt711_0_adr[] = {
 	}
 };
 
+static const struct snd_soc_acpi_adr_device rt711_1_adr[] = {
+	{
+		.adr = 0x000120025D071100,
+		.num_endpoints = 1,
+		.endpoints = &single_endpoint,
+	}
+};
+
 static const struct snd_soc_acpi_adr_device rt1308_1_dual_adr[] = {
 	{
 		.adr = 0x000120025D130800,
@@ -64,6 +72,14 @@ static const struct snd_soc_acpi_adr_device rt1308_1_single_adr[] = {
 	}
 };
 
+static const struct snd_soc_acpi_adr_device rt1308_2_single_adr[] = {
+	{
+		.adr = 0x000220025D130800,
+		.num_endpoints = 1,
+		.endpoints = &single_endpoint,
+	}
+};
+
 static const struct snd_soc_acpi_adr_device rt1308_1_group1_adr[] = {
 	{
 		.adr = 0x000120025D130800,
@@ -77,6 +93,14 @@ static const struct snd_soc_acpi_adr_device rt1308_2_group1_adr[] = {
 		.adr = 0x000220025D130800,
 		.num_endpoints = 1,
 		.endpoints = &spk_r_endpoint,
+	}
+};
+
+static const struct snd_soc_acpi_adr_device rt715_0_adr[] = {
+	{
+		.adr = 0x000021025D071500,
+		.num_endpoints = 1,
+		.endpoints = &single_endpoint,
 	}
 };
 
@@ -189,12 +213,41 @@ static const struct snd_soc_acpi_link_adr tgl_3_in_1_mono_amp[] = {
 	{}
 };
 
+static const struct snd_soc_acpi_link_adr tgl_olympic_amp[] = {
+	{
+		.mask = BIT(1),
+		.num_adr = ARRAY_SIZE(rt711_1_adr),
+		.adr_d = rt711_1_adr,
+	},
+	{
+		.mask = BIT(2),
+		.num_adr = ARRAY_SIZE(rt1308_2_single_adr),
+		.adr_d = rt1308_2_single_adr,
+	},
+	{
+		.mask = BIT(0),
+		.num_adr = ARRAY_SIZE(rt715_0_adr),
+		.adr_d = rt715_0_adr,
+	},
+	{}
+};
+
 static struct snd_soc_acpi_codecs tgl_max98373_amp = {
 	.num_codecs = 1,
 	.codecs = {"MX98373"}
 };
 
 struct snd_soc_acpi_mach snd_soc_acpi_intel_tgl_machines[] = {
+	{
+		/*
+		 * link_mask should be 0x7, but all links are enabled by BIOS.
+		 */
+		.link_mask = 0x7,
+		.links = tgl_olympic_amp,
+		.drv_name = "sof_sdw",
+		.sof_fw_filename = "sof-tgl.ri",
+		.sof_tplg_filename = "sof-tgl-rt711-rt1308-mono-rt715.tplg",
+	},
 	{
 		.id = "10EC1308",
 		.drv_name = "sof_sdw",
