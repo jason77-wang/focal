@@ -239,16 +239,6 @@ static struct snd_soc_acpi_codecs tgl_max98373_amp = {
 
 struct snd_soc_acpi_mach snd_soc_acpi_intel_tgl_machines[] = {
 	{
-		/*
-		 * link_mask should be 0x7, but all links are enabled by BIOS.
-		 */
-		.link_mask = 0x7,
-		.links = tgl_olympic_amp,
-		.drv_name = "sof_sdw",
-		.sof_fw_filename = "sof-tgl.ri",
-		.sof_tplg_filename = "sof-tgl-rt711-rt1308-mono-rt715.tplg",
-	},
-	{
 		.id = "10EC1308",
 		.drv_name = "sof_sdw",
 		.link_mask = 0x1, /* RT711 on SoundWire link0 */
@@ -278,6 +268,16 @@ EXPORT_SYMBOL_GPL(snd_soc_acpi_intel_tgl_machines);
 
 /* this table is used when there is no I2S codec present */
 struct snd_soc_acpi_mach snd_soc_acpi_intel_tgl_sdw_machines[] = {
+	{
+		/*
+		 * link_mask should be 0x7, but all links are enabled by BIOS.
+		 */
+		.link_mask = 0x7,
+		.links = tgl_olympic_amp,
+		.drv_name = "sof_sdw",
+		.sof_fw_filename = "sof-tgl.ri",
+		.sof_tplg_filename = "sof-tgl-rt711-rt1308-mono-rt715.tplg",
+	},
 	{
 		.link_mask = 0xF, /* 4 active links required */
 		.links = tgl_3_in_1_default,
